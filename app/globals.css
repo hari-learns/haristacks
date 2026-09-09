@@ -1,0 +1,452 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ============================================================
+   TOKENS — no colour literal may appear outside these blocks
+   ============================================================ */
+
+:root {
+  color-scheme: light;
+
+  /* ground */
+  --ground: #f6f2e9;
+  --ground-deep: #efe9dc;
+  --surface: #fffdf8;
+  --surface-2: #f1ece0;
+
+  /* ink */
+  --ink: #201e1a;
+  --muted: #56514a;
+  --faint: #6b665b;
+
+  /* structure */
+  --line: #e0d9ca;
+  --line-soft: #ebe5d8;
+  --shadow: 24 22 18;
+
+  /* category accents */
+  --life: #3f7350;
+  --life-ink: #2f5a3d;
+  --sports: #a8452f;
+  --sports-ink: #8e3826;
+  --people: #98622f;
+  --people-ink: #7d5026;
+  --stories: #5c4c88;
+  --stories-ink: #4b3d73;
+  --tech: #2f6f7a;
+  --tech-ink: #245862;
+  --finance: #8a6a1f;
+  --finance-ink: #6f5518;
+
+  /* the accent in play — set per section */
+  --accent: var(--life);
+  --accent-ink: var(--life-ink);
+  --on-accent: #fffdf8;
+
+  /* rhythm */
+  --gut: clamp(20px, 5.5vw, 56px);
+  --band: clamp(64px, 9vw, 128px);
+  --measure: 63ch;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --ground: #101312;
+  --ground-deep: #0b0e0d;
+  --surface: #171b1a;
+  --surface-2: #1e2321;
+
+  --ink: #e9e6dd;
+  --muted: #a49f93;
+  --faint: #8d887c;
+
+  --line: #262c2a;
+  --line-soft: #1d2221;
+  --shadow: 0 0 0;
+
+  --life: #82bb95;
+  --life-ink: #9ccfad;
+  --sports: #e08d72;
+  --sports-ink: #eda58c;
+  --people: #d8a673;
+  --people-ink: #e5bb90;
+  --stories: #a795cd;
+  --stories-ink: #bcaede;
+  --tech: #79bac4;
+  --tech-ink: #94cdd6;
+  --finance: #d6b464;
+  --finance-ink: #e4c884;
+
+  --accent: var(--life);
+  --accent-ink: var(--life-ink);
+  --on-accent: #101312;
+}
+
+@theme inline {
+  --color-ground: var(--ground);
+  --color-ground-deep: var(--ground-deep);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-line-soft: var(--line-soft);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-on-accent: var(--on-accent);
+  --font-serif: var(--font-newsreader), ui-serif, Georgia, "Times New Roman", serif;
+  --font-pixel: var(--font-pixelify), ui-monospace, "Courier New", monospace;
+  --ease-calm: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* per-section accent swap */
+[data-accent="life"] { --accent: var(--life); --accent-ink: var(--life-ink); }
+[data-accent="sports"] { --accent: var(--sports); --accent-ink: var(--sports-ink); }
+[data-accent="people"] { --accent: var(--people); --accent-ink: var(--people-ink); }
+[data-accent="stories"] { --accent: var(--stories); --accent-ink: var(--stories-ink); }
+[data-accent="tech"] { --accent: var(--tech); --accent-ink: var(--tech-ink); }
+[data-accent="finance"] { --accent: var(--finance); --accent-ink: var(--finance-ink); }
+
+/* Everything below sits in a cascade layer so Tailwind utilities can
+   still override it. Unlayered CSS beats every layer, which silently
+   breaks utilities like `hidden` against a bare `svg { display: block }`. */
+
+@layer base {
+  /* ============================================================
+     BASE
+     ============================================================ */
+
+  * { min-width: 0; }
+
+  html {
+    overflow-x: clip;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-serif);
+    font-synthesis-weight: none;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--accent) 26%, transparent);
+    color: var(--ink);
+  }
+
+  a { color: inherit; -webkit-tap-highlight-color: color-mix(in oklab, var(--accent) 18%, transparent); }
+
+  :focus-visible {
+    outline: 2px solid var(--accent-ink);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  img, svg, canvas { display: block; max-width: 100%; }
+
+  .pixelated {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+  }
+}
+
+@layer components {
+  /* ============================================================
+     TYPE SCALE
+     ============================================================ */
+
+  .t-pixel {
+    font-family: var(--font-pixel);
+    font-size: clamp(0.66rem, 0.6rem + 0.25vw, 0.78rem);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .t-display {
+    font-size: clamp(2.4rem, 1.3rem + 4.6vw, 4.6rem);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    font-weight: 400;
+    text-wrap: balance;
+  }
+
+  .t-title {
+    font-size: clamp(1.9rem, 1.2rem + 3vw, 3.3rem);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    font-weight: 400;
+    text-wrap: balance;
+  }
+
+  .t-lede {
+    font-size: clamp(1.06rem, 1rem + 0.5vw, 1.3rem);
+    line-height: 1.5;
+    color: var(--muted);
+    font-style: italic;
+    text-wrap: pretty;
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: 1180px;
+    margin-inline: auto;
+    padding-inline: var(--gut);
+  }
+
+  .wrap-read {
+    width: 100%;
+    max-width: calc(var(--measure) + var(--gut) * 2);
+    margin-inline: auto;
+    padding-inline: var(--gut);
+  }
+
+  /* ============================================================
+     PROSE — the reading experience
+     ============================================================ */
+
+  .prose {
+    font-size: clamp(1.09rem, 1.01rem + 0.42vw, 1.26rem);
+    line-height: 1.78;
+    letter-spacing: 0.001em;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+
+  .prose > * + * { margin-top: 1.32em; }
+
+  .prose p { hanging-punctuation: first last; }
+
+  .prose strong {
+    font-weight: 600;
+    color: var(--ink);
+    background: linear-gradient(transparent 62%, color-mix(in oklab, var(--accent) 22%, transparent) 62%);
+    padding-inline: 0.06em;
+  }
+
+  .prose em { font-style: italic; }
+
+  .prose a {
+    color: var(--accent-ink);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: 1px;
+    text-decoration-color: color-mix(in oklab, var(--accent) 45%, transparent);
+  }
+
+  .prose h2 {
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-top: 2.2em;
+    text-wrap: balance;
+  }
+
+  .prose h3 {
+    font-size: clamp(1.22rem, 1.1rem + 0.6vw, 1.5rem);
+    line-height: 1.3;
+    margin-top: 1.9em;
+  }
+
+  .prose ul, .prose ol { padding-left: 1.3em; }
+  .prose li + li { margin-top: 0.5em; }
+  .prose ul { list-style: none; padding-left: 1.15em; }
+  .prose ul > li { position: relative; }
+  .prose ul > li::before {
+    content: "";
+    position: absolute;
+    left: -1.05em;
+    top: 0.72em;
+    width: 5px;
+    height: 5px;
+    background: var(--accent);
+  }
+
+  /* pull quote — the emotional peaks get real design */
+  .prose blockquote {
+    margin-block: clamp(2rem, 5vw, 3.2rem);
+    margin-inline: 0;
+    padding: clamp(1.3rem, 4vw, 2rem) 0 clamp(1.3rem, 4vw, 2rem) clamp(1.1rem, 4vw, 1.8rem);
+    border-left: 5px solid var(--accent);
+    font-size: clamp(1.24rem, 1.06rem + 0.95vw, 1.72rem);
+    line-height: 1.42;
+    letter-spacing: -0.015em;
+    font-style: italic;
+    color: var(--ink);
+    position: relative;
+  }
+
+  .prose blockquote > * + * { margin-top: 0.7em; }
+  .prose blockquote em { font-style: italic; }
+  .prose blockquote strong { background: none; }
+
+  .prose blockquote::after {
+    content: "";
+    position: absolute;
+    left: -5px;
+    bottom: -6px;
+    width: 5px;
+    height: 5px;
+    background: var(--accent);
+    opacity: 0.5;
+  }
+
+  /* the * * * break, as three pixels */
+  .prose hr {
+    border: 0;
+    margin-block: clamp(2.4rem, 6vw, 3.6rem);
+    height: 6px;
+    background-image:
+      linear-gradient(var(--accent), var(--accent)),
+      linear-gradient(var(--accent), var(--accent)),
+      linear-gradient(var(--accent), var(--accent));
+    background-size: 6px 6px;
+    background-repeat: no-repeat;
+    background-position: calc(50% - 18px) 0, 50% 0, calc(50% + 18px) 0;
+    opacity: 0.8;
+  }
+
+  .prose img { margin-block: 2rem; border-radius: 2px; }
+
+  .prose > p:first-of-type::first-letter {
+    font-size: 3.1em;
+    line-height: 0.84;
+    float: left;
+    padding-right: 0.09em;
+    padding-top: 0.06em;
+    color: var(--accent-ink);
+    font-weight: 500;
+  }
+
+  /* ============================================================
+     COMPONENTS
+     ============================================================ */
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6em;
+    min-height: 52px;
+    padding: 0 clamp(1.4rem, 5vw, 2.1rem);
+    background: var(--ink);
+    color: var(--ground);
+    border-radius: 999px;
+    font-family: var(--font-pixel);
+    font-size: 0.85rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition: transform 240ms var(--ease), background 240ms var(--ease);
+  }
+
+  @media (hover: hover) {
+    .pill:hover { transform: translateY(-2px); background: var(--accent-ink); color: var(--on-accent); }
+  }
+  .pill:active { transform: translateY(0); }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    font-family: var(--font-pixel);
+    font-size: 0.63rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+  }
+
+  .chip::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    background: var(--accent);
+    flex: none;
+  }
+
+  .rule { height: 1px; background: var(--line); border: 0; }
+
+  /* a chip that is also a link needs a thumb-sized target */
+  a.chip {
+    min-height: 44px;
+    padding-right: 0.6em;
+  }
+
+  .taplink {
+    display: inline-block;
+    padding-block: 17px;
+  }
+
+  /* tap-target padding for dense link lists on phones */
+  @media (max-width: 860px) {
+    .taplist a { display: inline-block; padding-block: 17px; }
+  }
+
+  /* reveal — must never strand content */
+  .reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 700ms var(--ease), transform 700ms var(--ease);
+  }
+  .reveal.is-in { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+
+  /* ============================================================
+     MOTION SNIPPETS
+     ============================================================ */
+
+  @keyframes breathe {
+    0%, 100% { transform: translateY(0); opacity: 0.55; }
+    50% { transform: translateY(3px); opacity: 1; }
+  }
+  .breathe { animation: breathe 3.2s var(--ease) infinite; }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .skip {
+    position: absolute;
+    left: var(--gut);
+    top: -100px;
+    z-index: 100;
+    background: var(--ink);
+    color: var(--ground);
+    padding: 12px 18px;
+    border-radius: 999px;
+    font-family: var(--font-pixel);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    transition: top 200ms var(--ease);
+  }
+  .skip:focus { top: 12px; }
+}
