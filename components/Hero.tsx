@@ -47,11 +47,11 @@ export default function Hero() {
   return (
     <section
       data-accent={word === "sport" ? "sports" : word}
-      className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden"
+      className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-0 py-28"
     >
       <PixelHorizon
         className="absolute inset-0"
-        horizon={0.45}
+        horizon={0.30}
         onPhase={setPhase}
       />
 
@@ -69,15 +69,15 @@ export default function Hero() {
       {/* the horizon dissolving into the page, so the words are legible
           against every one of the four palettes */}
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 top-1/3"
+        className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "linear-gradient(to bottom, transparent 0%, color-mix(in oklab, var(--ground) 62%, transparent) 30%, color-mix(in oklab, var(--ground) 96%, transparent) 55%, var(--ground) 74%)",
+            "linear-gradient(to bottom, transparent 0%, transparent 27%, color-mix(in oklab, var(--ground) 45%, transparent) 32%, color-mix(in oklab, var(--ground) 88%, transparent) 38%, color-mix(in oklab, var(--ground) 99%, transparent) 44%, var(--ground) 49%)",
         }}
         aria-hidden="true"
       />
 
-      <div className="wrap relative z-10 pb-[max(3.5rem,env(safe-area-inset-bottom))] pt-24">
+      <div className="wrap relative z-10 text-center">
         {phase ? (
           <p className="t-pixel mb-6 text-faint">
             <span className="text-accent-ink">{phase}</span> where you are
@@ -86,7 +86,7 @@ export default function Hero() {
           <p className="t-pixel mb-6 text-faint">&nbsp;</p>
         )}
 
-        <h1 className="t-display max-w-[16ch]">
+        <h1 className="t-display mx-auto max-w-[16ch]">
           {/* the whole sentence, for anything that reads rather than watches */}
           <span className="sr-only">{SITE.tagline}</span>
           <span aria-hidden="true">
@@ -106,7 +106,7 @@ export default function Hero() {
           </span>
         </h1>
 
-        <p className="t-lede mt-7 max-w-[38ch]">
+        <p className="t-lede mx-auto mt-7 max-w-[34ch]">
           Long reads, written slowly. Nothing here is in a hurry.
         </p>
 
@@ -118,7 +118,7 @@ export default function Hero() {
       </div>
 
       <div
-        className="pointer-events-none absolute bottom-4 left-1/2 z-10 -translate-x-1/2"
+        className="pointer-events-none absolute bottom-[max(1.25rem,env(safe-area-inset-bottom))] left-1/2 z-10 -translate-x-1/2"
         aria-hidden="true"
       >
         <svg viewBox="0 0 9 6" width="18" height="12" className="breathe" fill="var(--faint)" shapeRendering="crispEdges">

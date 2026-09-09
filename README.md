@@ -1,6 +1,6 @@
 # haristacks
 
-Hari writes life, tech, finance, sport and feelings.
+Hari writes tech, finance, feelings, sport and life.
 
 A static blog. No CMS, no database. Every page is prerendered.
 

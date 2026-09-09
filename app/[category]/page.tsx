@@ -59,7 +59,6 @@ export default async function CategoryPage({ params }: PageProps<"/[category]">)
               <div>
                 <p className="t-pixel text-faint">Section</p>
                 <h1 className="t-title mt-4">{cat.label}</h1>
-                <p className="t-lede mt-4 max-w-[34ch]">{cat.blurb}</p>
               </div>
               <PixelMotif motif={cat.motif} size={72} className="flex-none opacity-85 sm:h-[84px] sm:w-[84px]" />
             </div>

@@ -33,7 +33,7 @@ export default function Home() {
                   key={c.slug}
                   href={`/${c.slug}`}
                   data-accent={c.slug}
-                  className="reveal group relative flex min-h-[13rem] flex-col justify-between bg-ground p-7 transition-colors duration-500 hover:bg-surface sm:min-h-[15rem] sm:p-9"
+                  className="reveal group relative flex min-h-[9.5rem] flex-col justify-between bg-ground p-7 transition-colors duration-500 hover:bg-surface sm:min-h-[12rem] sm:p-9"
                   style={{ transitionDelay: `${i * 70}ms` }}
                 >
                   <div className="flex items-start justify-between gap-4">
@@ -41,9 +41,6 @@ export default function Home() {
                       <h3 className="text-[clamp(1.5rem,1.2rem+1.5vw,2.1rem)] leading-none tracking-[-0.02em] transition-colors duration-300 group-hover:text-accent-ink">
                         {c.label}
                       </h3>
-                      <p className="mt-3 max-w-[26ch] text-[0.98rem] italic leading-[1.5] text-muted">
-                        {c.blurb}
-                      </p>
                     </div>
                     <PixelMotif
                       motif={c.motif}

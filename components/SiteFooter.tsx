@@ -22,8 +22,8 @@ export default function SiteFooter() {
 
       <div className="wrap relative z-10 pb-[max(2.5rem,env(safe-area-inset-bottom))] pt-32">
         <p className="max-w-[22ch] text-[clamp(1.3rem,1.1rem+1.1vw,1.85rem)] leading-[1.28] tracking-[-0.02em]">
-          Hari writes <em className="italic">life, tech, finance, sport</em> and{" "}
-          <em className="italic">feelings</em>.
+          Hari writes <em className="italic">tech, finance, feelings, sport</em>{" "}
+          and <em className="italic">life</em>.
         </p>
 
         <nav aria-label="Footer" className="taplist mt-10 flex flex-wrap gap-x-7 gap-y-1">

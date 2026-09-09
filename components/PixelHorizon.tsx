@@ -214,7 +214,7 @@ export default function PixelHorizon({
         const depth = (y - horizonY) / Math.max(1, waterEndY - horizonY);
         const wob = Math.round(Math.sin(y * 0.9) * (1 + depth * 3));
         const wide = Math.max(1, Math.round(4 - depth * 2));
-        bx.fillStyle = mix2s(pal.water, pal.waterShine, 0.85 - depth * 0.55);
+        bx.fillStyle = mix2s(pal.water, pal.waterShine, 0.5 - depth * 0.35);
         bx.fillRect(discX - Math.floor(wide / 2) + wob, y, wide, 1);
       }
 
