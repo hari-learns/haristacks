@@ -110,13 +110,10 @@ export default function Hero() {
           Long reads, written slowly. Nothing here is in a hurry.
         </p>
 
-        <div className="mt-10 flex flex-wrap items-center gap-5">
+        <div className="mt-10">
           <Link href="#sections" className="pill">
             Read
           </Link>
-          <span className="t-pixel text-faint">
-            {WORDS.length} things worth thinking about
-          </span>
         </div>
       </div>
 
