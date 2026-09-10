@@ -29,6 +29,25 @@ const GRIDS: Record<Category["motif"], string[]> = {
     "................",
     "................",
   ],
+  // a terminal with a couple of lines in it
+  terminal: [
+    "................",
+    "................",
+    "..aaaaaaaaaaaa..",
+    "..a..........a..",
+    "..a.bb.......a..",
+    "..a..........a..",
+    "..a..bbbb....a..",
+    "..a..........a..",
+    "..a.bb.......a..",
+    "..a..........a..",
+    "..aaaaaaaaaaaa..",
+    "......aaaa......",
+    "......aaaa......",
+    "....cccccccc....",
+    "................",
+    "................",
+  ],
   // floodlight over a ball
   floodlight: [
     "................",

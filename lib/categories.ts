@@ -3,7 +3,7 @@
  * matching folder under content/. Nothing else in the app hardcodes a slug.
  */
 
-export type CategorySlug = "life" | "sports" | "people" | "stories";
+export type CategorySlug = "life" | "tech" | "sports" | "people" | "stories";
 
 export type Category = {
   slug: CategorySlug;
@@ -11,7 +11,7 @@ export type Category = {
   /** shown under the section heading and in card previews */
   blurb: string;
   /** the pixel motif drawn on the card, see components/PixelMotif.tsx */
-  motif: "fern" | "floodlight" | "figures" | "campfire";
+  motif: "fern" | "terminal" | "floodlight" | "figures" | "campfire";
 };
 
 export const CATEGORIES: Category[] = [
@@ -20,6 +20,12 @@ export const CATEGORIES: Category[] = [
     label: "Life",
     blurb: "How to carry things, and when to put them down.",
     motif: "fern",
+  },
+  {
+    slug: "tech",
+    label: "Tech",
+    blurb: "What the machines are doing to the work, and to us.",
+    motif: "terminal",
   },
   {
     slug: "sports",

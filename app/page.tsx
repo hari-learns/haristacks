@@ -7,8 +7,18 @@ import SiteHeader from "@/components/SiteHeader";
 import { CATEGORIES } from "@/lib/categories";
 import { getAllPosts, getPostsByCategory } from "@/lib/posts";
 
+const NUMBER_WORDS = [
+  "no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+];
+
+function spell(n: number) {
+  return NUMBER_WORDS[n] ?? String(n);
+}
+
 export default function Home() {
   const posts = getAllPosts();
+  // an odd number of cards would otherwise leave a hole in the two-up grid
+  const oddCount = CATEGORIES.length % 2 === 1;
 
   return (
     <>
@@ -22,7 +32,7 @@ export default function Home() {
           className="wrap scroll-mt-16 pt-[var(--band)]"
         >
           <h2 id="sections-heading" className="t-pixel text-faint">
-            Four ways in
+            {spell(CATEGORIES.length)} ways in
           </h2>
 
           <div className="mt-9 grid gap-px bg-line sm:grid-cols-2">
@@ -33,7 +43,9 @@ export default function Home() {
                   key={c.slug}
                   href={`/${c.slug}`}
                   data-accent={c.slug}
-                  className="reveal group relative flex min-h-[9.5rem] flex-col justify-between bg-ground p-7 transition-colors duration-500 hover:bg-surface sm:min-h-[12rem] sm:p-9"
+                  className={`reveal group relative flex min-h-[9.5rem] flex-col justify-between bg-ground p-7 transition-colors duration-500 hover:bg-surface sm:min-h-[12rem] sm:p-9 ${
+                    oddCount && i === CATEGORIES.length - 1 ? "sm:col-span-2" : ""
+                  }`}
                   style={{ transitionDelay: `${i * 70}ms` }}
                 >
                   <div className="flex items-start justify-between gap-4">
