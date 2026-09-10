@@ -665,3 +665,76 @@
     text-decoration-color: color-mix(in oklab, var(--faint) 55%, transparent);
   }
 }
+
+@layer components {
+  /* ==========================================================
+     CALLOUT AND PULL QUOTE
+     ========================================================== */
+
+  /* A boxed statement. Distinct from a quote: this is the writer talking. */
+  .prose .callout {
+    display: block;
+    margin-block: clamp(1.8rem, 5vw, 2.6rem);
+    padding: clamp(1.1rem, 4vw, 1.6rem) clamp(1.2rem, 4vw, 1.8rem);
+    background: color-mix(in oklab, var(--accent) 11%, var(--surface));
+    border: 1px solid color-mix(in oklab, var(--accent) 34%, transparent);
+    border-radius: 3px;
+    font-size: clamp(1.05rem, 0.98rem + 0.4vw, 1.2rem);
+    line-height: 1.6;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+
+  .prose .callout > * + * { margin-top: 0.8em; }
+
+  /* Someone else's words, given room. */
+  .prose .pullquote {
+    margin-block: clamp(2.2rem, 6vw, 3.4rem);
+    margin-inline: 0;
+    text-align: center;
+  }
+
+  .prose .pullquote blockquote {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: clamp(1.2rem, 1rem + 1.1vw, 1.7rem);
+    line-height: 1.4;
+    letter-spacing: -0.015em;
+    font-style: italic;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+
+  .prose .pullquote blockquote::after { content: none; }
+
+  .prose .pullquote figcaption {
+    margin-top: 1rem;
+    font-family: var(--font-pixel);
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  /* three pixels above and below, so the quote sits in its own clearing */
+  .prose .pullquote::before,
+  .prose .pullquote::after {
+    content: "";
+    display: block;
+    height: 4px;
+    width: 44px;
+    margin-inline: auto;
+    background-image:
+      linear-gradient(var(--accent), var(--accent)),
+      linear-gradient(var(--accent), var(--accent)),
+      linear-gradient(var(--accent), var(--accent));
+    background-size: 4px 4px;
+    background-repeat: no-repeat;
+    background-position: 0 0, 20px 0, 40px 0;
+    opacity: 0.6;
+  }
+
+  .prose .pullquote::before { margin-bottom: clamp(1.1rem, 3vw, 1.6rem); }
+  .prose .pullquote::after { margin-top: clamp(1.1rem, 3vw, 1.6rem); }
+}

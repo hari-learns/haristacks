@@ -6,7 +6,24 @@ A static blog. No CMS, no database. Every page is prerendered.
 
 ## Adding a post
 
-Create one file. Nothing else changes.
+If it is already on Substack, import it:
+
+```bash
+python3 scripts/import-substack.py https://haristacks.substack.com/p/<slug> <section>
+```
+
+That pulls the post from Substack's own API, so it reflects edits made a
+minute ago rather than whatever the CDN has cached. It keeps links,
+highlights, callouts, pull quotes, images, video embeds and line breaks,
+downloads the images into `public/posts/<slug>/`, and finishes by printing a
+word-for-word comparison against the source. Anything it drops or cannot
+place, it says so.
+
+Two things it leaves for you: image `alt` text, which it writes empty and
+lists on the way out, and Substack's own subscribe caption, which it drops
+because it was never part of the writing.
+
+Or create one file by hand. Nothing else changes.
 
 ```
 content/<section>/<slug>.mdx
@@ -29,6 +46,13 @@ Body in Markdown. `* * *` on its own line becomes the three-pixel break.
 
 Reading time is calculated. Ordering is by date, newest first. The URL is
 `/<section>/<slug>`.
+
+Beyond plain Markdown, a post can use `<mark>` for a highlight, a
+`<figure>` with an optional `<figcaption>`, `<aside className="callout">`
+for a boxed statement, `<figure className="pullquote">` for someone else's
+words with an attribution, and `<div className="embed">` around an iframe
+for video. A paragraph that is nothing but a highlight becomes a section
+heading, unless nothing follows it.
 
 Adding a whole new section is one entry in `lib/categories.ts` plus a folder
 under `content/`.
