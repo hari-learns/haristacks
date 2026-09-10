@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
 /**
@@ -10,6 +11,12 @@ import { useEffect } from "react";
  * scrolled past after an anchor jump or a bfcache restore.
  */
 export default function Reveal() {
+  // This is mounted in the root layout, which does not remount between routes.
+  // Without the pathname dependency the sweep never runs again after a
+  // client-side navigation, and the next page's lists sit at opacity 0 until
+  // something happens to fire a scroll event.
+  const pathname = usePathname();
+
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const nodes = () => Array.from(document.querySelectorAll<HTMLElement>(".reveal"));
@@ -52,7 +59,7 @@ export default function Reveal() {
       window.removeEventListener("load", sweep);
       window.removeEventListener("pageshow", sweep);
     };
-  }, []);
+  }, [pathname]);
 
   return null;
 }

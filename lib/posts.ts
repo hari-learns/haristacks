@@ -48,7 +48,10 @@ function readCategory(category: CategorySlug): Post[] {
 let cache: Post[] | null = null;
 
 export function getAllPosts(): Post[] {
-  if (cache) return cache;
+  // In development the tree is read every time, so adding or editing a post
+  // shows up on the next refresh instead of needing a server restart.
+  if (cache && process.env.NODE_ENV === "production") return cache;
+
   const all = CATEGORIES.flatMap((c) => readCategory(c.slug));
   all.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
   cache = all;

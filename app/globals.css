@@ -547,3 +547,121 @@
     .like-btn .heart { transition: none; }
   }
 }
+
+@layer components {
+  /* An unfold that animates to the content's own height.
+     The inner element must stay overflow:hidden with min-height:0. */
+  .unfold {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition:
+      grid-template-rows 520ms var(--ease),
+      opacity 300ms var(--ease);
+  }
+
+  .unfold > * {
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  .unfold.is-open {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transition:
+      grid-template-rows 520ms var(--ease),
+      opacity 420ms var(--ease) 90ms;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .unfold { transition: none; }
+    .unfold.is-open { transition: none; }
+  }
+}
+
+@layer components {
+  /* ==========================================================
+     PROSE EXTRAS — highlights and embeds
+     ========================================================== */
+
+  .prose mark {
+    background: color-mix(in oklab, var(--accent) 24%, transparent);
+    color: var(--ink);
+    padding-inline: 0.14em;
+    border-radius: 1px;
+  }
+
+  .prose h2 mark {
+    background: color-mix(in oklab, var(--accent) 20%, transparent);
+    padding-inline: 0.2em;
+  }
+
+  .prose .embed {
+    position: relative;
+    margin-block: clamp(1.8rem, 5vw, 2.6rem);
+    aspect-ratio: 16 / 9;
+    background: var(--surface-2);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .prose .embed iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .prose figcaption,
+  .prose img + em {
+    display: block;
+    margin-top: 0.7rem;
+    font-size: 0.92rem;
+    color: var(--faint);
+  }
+
+  /* ==========================================================
+     LOADER
+     ========================================================== */
+
+  @keyframes chase {
+    0%, 100% { opacity: 0.16; }
+    18% { opacity: 1; }
+  }
+
+  .chase {
+    opacity: 0.16;
+    animation: chase 1.05s linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .chase { animation: none; opacity: 0.55; }
+  }
+}
+
+@layer components {
+  .prose figure {
+    margin-block: clamp(1.8rem, 5vw, 2.6rem);
+    margin-inline: 0;
+  }
+
+  .prose figure img {
+    width: 100%;
+    height: auto;
+    border-radius: 2px;
+    margin-block: 0;
+  }
+
+  .prose figcaption {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--faint);
+  }
+
+  .prose figcaption a {
+    color: var(--faint);
+    text-decoration-color: color-mix(in oklab, var(--faint) 55%, transparent);
+  }
+}

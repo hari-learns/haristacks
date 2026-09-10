@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import PixelBubble from "./PixelBubble";
+import PixelLoader from "./PixelLoader";
 import PixelHeart from "./PixelHeart";
 
 type Comment = { id: string; name: string; body: string; at: number };
@@ -45,6 +47,8 @@ export default function PostReactions({ post }: { post: string }) {
   const [posted, setPosted] = useState(false);
   const honeypot = useRef<HTMLInputElement | null>(null);
   const [adminToken, setAdminToken] = useState("");
+  const [open, setOpen] = useState(false);
+  const bodyRef = useRef<HTMLTextAreaElement | null>(null);
 
   /* ---- load ---- */
 
@@ -181,6 +185,16 @@ export default function PostReactions({ post }: { post: string }) {
     }
   }
 
+  function toggleForm() {
+    const next = !open;
+    setOpen(next);
+    setError(null);
+    // let the unfold finish before pulling focus, or the page jumps
+    if (next) {
+      window.setTimeout(() => bodyRef.current?.focus({ preventScroll: true }), 420);
+    }
+  }
+
   async function remove(id: string) {
     if (!adminToken) return;
     const before = comments;
@@ -254,18 +268,21 @@ export default function PostReactions({ post }: { post: string }) {
       </div>
 
       {/* ---- thread ---- */}
-      <div className="mt-14">
-        <p className="t-pixel text-faint">
-          {count === 0 ? "Comments" : count === 1 ? "1 comment" : `${count} comments`}
-        </p>
-
-        {comments === null ? (
-          <p className="mt-6 italic text-faint">Loading the thread…</p>
-        ) : comments.length === 0 ? (
-          <p className="mt-6 border-t border-line-soft pt-6 italic text-muted">
-            No one has said anything yet.
+      <div className="mt-12">
+        {comments === null && !offline ? (
+          <p className="t-pixel flex items-center text-faint">
+            <PixelLoader size={15} label="Loading the thread" />
+            <span className="ml-1">reading the room</span>
           </p>
-        ) : (
+        ) : null}
+
+        {count > 0 ? (
+          <p className="t-pixel text-faint">
+            {count === 1 ? "1 comment" : `${count} comments`}
+          </p>
+        ) : null}
+
+        {comments && comments.length > 0 ? (
           <ul className="mt-4">
             {comments.map((c) => (
               <li key={c.id} className="comment">
@@ -286,68 +303,92 @@ export default function PostReactions({ post }: { post: string }) {
               </li>
             ))}
           </ul>
-        )}
+        ) : null}
 
-        {/* ---- form ---- */}
+        {/* ---- the form, folded away until asked for ---- */}
         {offline ? null : (
-          <form onSubmit={submit} className="mt-10 border-t border-line pt-9">
-            <label htmlFor="c-name" className="t-pixel block text-faint">
-              Name — optional
-            </label>
-            <input
-              id="c-name"
-              name="name"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              maxLength={40}
-              autoComplete="name"
-              placeholder="blank means you get a handle"
-              className="field mt-3"
-            />
-
-            {/* not visible, not reachable by keyboard, only bots fill it */}
-            <input
-              ref={honeypot}
-              type="text"
-              name="website"
-              tabIndex={-1}
-              autoComplete="off"
-              aria-hidden="true"
-              className="sr-only"
-            />
-
-            <label htmlFor="c-body" className="t-pixel mt-7 block text-faint">
-              Comment
-            </label>
-            <textarea
-              id="c-body"
-              name="body"
-              value={body}
-              onChange={(e) => setBody(e.target.value.slice(0, MAX_BODY))}
-              maxLength={MAX_BODY}
-              required
-              placeholder="What did this make you think about?"
-              className="field mt-3"
-            />
-
-            <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
-              <button type="submit" disabled={sending} className="pill disabled:opacity-50">
-                {sending ? "Sending" : "Post"}
+          <>
+            <div className={count > 0 ? "mt-9 border-t border-line pt-9" : "mt-2"}>
+              <button
+                type="button"
+                onClick={toggleForm}
+                aria-expanded={open}
+                aria-controls="comment-form"
+                className="like-btn"
+              >
+                <PixelBubble size={17} />
+                <span className="t-pixel">{open ? "Never mind" : "Comment"}</span>
               </button>
-              <span className="t-pixel text-faint" aria-live="polite">
-                {error ? (
-                  <span className="text-accent-ink">{error}</span>
-                ) : posted ? (
-                  "posted"
-                ) : left < 200 ? (
-                  `${left} left`
-                ) : (
-                  ""
-                )}
-              </span>
             </div>
-          </form>
+
+            <div
+              id="comment-form"
+              className={`unfold ${open ? "is-open" : ""}`}
+              inert={!open}
+            >
+              <div>
+                <form onSubmit={submit} className="pt-8">
+                  <label htmlFor="c-name" className="t-pixel block text-faint">
+                    Name — optional
+                  </label>
+                  <input
+                    id="c-name"
+                    name="name"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    maxLength={40}
+                    autoComplete="name"
+                    placeholder="maincharacter?"
+                    className="field mt-3"
+                  />
+
+                  {/* not visible, not reachable by keyboard, only bots fill it */}
+                  <input
+                    ref={honeypot}
+                    type="text"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                    className="sr-only"
+                  />
+
+                  <label htmlFor="c-body" className="t-pixel mt-7 block text-faint">
+                    Comment
+                  </label>
+                  <textarea
+                    id="c-body"
+                    name="body"
+                    ref={bodyRef}
+                    value={body}
+                    onChange={(e) => setBody(e.target.value.slice(0, MAX_BODY))}
+                    maxLength={MAX_BODY}
+                    required
+                    placeholder="What did this make you think about?"
+                    className="field mt-3"
+                  />
+
+                  <div className="mt-5 flex flex-wrap items-center justify-between gap-4 pb-1">
+                    <button type="submit" disabled={sending} className="pill disabled:opacity-50">
+                      {sending ? "Sending" : "Post"}
+                    </button>
+                    <span className="t-pixel text-faint" aria-live="polite">
+                      {error ? (
+                        <span className="text-accent-ink">{error}</span>
+                      ) : posted ? (
+                        "posted"
+                      ) : left < 200 ? (
+                        `${left} left`
+                      ) : (
+                        ""
+                      )}
+                    </span>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </>
         )}
       </div>
     </section>
