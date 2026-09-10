@@ -450,3 +450,100 @@
   }
   .skip:focus { top: 12px; }
 }
+
+@layer components {
+  /* ==========================================================
+     LIKES AND COMMENTS
+     ========================================================== */
+
+  .like-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7em;
+    min-height: 48px;
+    padding-inline: 1.1rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--faint);
+    background: transparent;
+    transition:
+      color 260ms var(--ease),
+      border-color 260ms var(--ease),
+      background 260ms var(--ease);
+  }
+
+  @media (hover: hover) {
+    .like-btn:hover { border-color: var(--accent); color: var(--accent-ink); }
+  }
+
+  .like-btn[aria-pressed="true"] {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: color-mix(in oklab, var(--accent) 10%, transparent);
+  }
+
+  .like-btn .heart {
+    transition: transform 320ms cubic-bezier(0.2, 1.6, 0.4, 1);
+  }
+  .like-btn[aria-pressed="true"] .heart { transform: scale(1.16); }
+  .like-btn:active .heart { transform: scale(0.9); }
+
+  /* the little burst, one square per direction */
+  .spark {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 3px;
+    height: 3px;
+    background: var(--accent);
+    opacity: 0;
+    animation: spark 620ms var(--ease) forwards;
+  }
+
+  @keyframes spark {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    100% {
+      transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.4);
+      opacity: 0;
+    }
+  }
+
+  .field {
+    width: 100%;
+    /* 16px minimum, or iOS Safari zooms the page on focus */
+    font-size: 16px;
+    font-family: var(--font-serif);
+    line-height: 1.6;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 0.85rem 0.95rem;
+    transition: border-color 200ms var(--ease);
+  }
+
+  .field::placeholder { color: var(--faint); }
+  .field:focus { border-color: var(--accent); outline: none; }
+  .field:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+
+  textarea.field { min-height: 8.5rem; resize: vertical; }
+
+  .comment {
+    border-top: 1px solid var(--line-soft);
+    padding-block: 1.35rem;
+  }
+
+  .comment-body {
+    margin-top: 0.55rem;
+    font-size: 1.02rem;
+    line-height: 1.62;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    text-wrap: pretty;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .spark { display: none; }
+    .like-btn .heart { transition: none; }
+  }
+}

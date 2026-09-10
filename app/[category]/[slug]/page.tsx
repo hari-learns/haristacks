@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import PixelHorizon from "@/components/PixelHorizon";
+import PostReactions from "@/components/PostReactions";
 import ReadingProgress from "@/components/ReadingProgress";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
@@ -106,6 +107,8 @@ export default async function PostPage({ params }: PageProps<"/[category]/[slug]
             </p>
           </div>
         </article>
+
+        <PostReactions post={`${post.category}/${post.slug}`} />
 
         {prev || next ? (
           <nav aria-label="More in this section" className="wrap-read mt-[var(--band)]">

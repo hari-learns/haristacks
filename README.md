@@ -33,6 +33,30 @@ Reading time is calculated. Ordering is by date, newest first. The URL is
 Adding a whole new section is one entry in `lib/categories.ts` plus a folder
 under `content/`.
 
+## Likes and comments
+
+Stored in Upstash Redis, provisioned through the Vercel Marketplace. A like is
+a counter, a comment is one JSON value with its id in a sorted set for
+ordering. No tables and no migrations.
+
+    hs:likes:<post>           counter
+    hs:comments:<post>        sorted set, member = comment id, score = time
+    hs:comment:<post>:<id>    the comment
+    hs:anon                   counter behind the maincharacter(n) handles
+
+Anyone can comment without an account. Leaving the name blank mints a handle
+like `maincharacter(7)`, remembered in that browser so the same person keeps it.
+
+Three things stand between the box and a bot: a hidden field no person can
+see, a per-address limit of 8 comments in 5 minutes, and a length cap. There
+is no approval queue — comments appear the moment they are posted.
+
+### Deleting a comment
+
+Go to `/admin`, paste the value of `ADMIN_TOKEN`, and delete buttons appear
+under every comment on that browser. The token is only ever checked on the
+server. With `ADMIN_TOKEN` unset, the delete endpoint returns 404 to everyone.
+
 ## The horizon
 
 `components/PixelHorizon.tsx` draws a pixel landscape on a canvas at roughly
